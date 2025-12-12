@@ -1,0 +1,5 @@
+{
+  "name": "Binary Lock",
+  "description": "An interactive cybersecurity-themed lock visualization where binary patterns decrypt to toggle the lock state.",
+  "requestFramePermissions": []
+}
