@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BinaryLock } from './components/BinaryLock';
+import { BinaryKey } from './components/BinaryKey';
 import { BackgroundEffects } from './components/BackgroundEffects';
 
 const App: React.FC = () => {
@@ -20,8 +21,10 @@ const App: React.FC = () => {
             : 'Secure channel established. System is open.'}
         </p>
 
-        <div className="mt-8">
+        {/* Container for Lock and Key side-by-side on desktop */}
+        <div className="mt-8 flex flex-col md:flex-row items-end gap-16 md:gap-24">
           <BinaryLock isLocked={isLocked} onToggle={() => setIsLocked(!isLocked)} />
+          <BinaryKey />
         </div>
       </div>
     </div>

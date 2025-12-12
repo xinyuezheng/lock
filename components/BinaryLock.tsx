@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { BitShape } from './BitShape';
 
 interface BinaryLockProps {
   isLocked: boolean;
@@ -53,9 +54,7 @@ export const BinaryLock: React.FC<BinaryLockProps> = ({ isLocked, onToggle }) =>
   // Transitioning: Chaos (0.5)
   const bias = isAnimating ? 0.5 : (isLocked ? 0.0 : 1.0);
   
-  // Speed Control: 
-  // Fast when animating (chaos) or unlocked (active state)
-  // "Slow" when locked (stable state), but fast enough to settle visually
+  // Speed Control
   const runFast = isAnimating || !isLocked;
 
   return (
@@ -107,89 +106,6 @@ export const BinaryLock: React.FC<BinaryLockProps> = ({ isLocked, onToggle }) =>
       `}>
         {isAnimating ? 'DECRYPTING...' : (isLocked ? 'LOCKED' : 'UNLOCKED')}
       </div>
-    </div>
-  );
-};
-
-// --- Helper Component for Rendering Bit Grids ---
-
-interface BitShapeProps {
-  map: string[];
-  runFast: boolean;
-  bias: number;
-  className?: string;
-}
-
-const BitShape: React.FC<BitShapeProps> = ({ map, runFast, bias, className }) => {
-  // Initialize bits with strict adherence to current bias
-  const [bits, setBits] = useState<string[][]>(() => 
-    map.map(row => row.split('').map(char => {
-      if (char !== '#') return ' ';
-      return Math.random() < bias ? '1' : '0';
-    }))
-  );
-
-  useEffect(() => {
-    let intervalId: ReturnType<typeof setInterval>;
-    
-    // Fast (50ms) for chaos/active, Slow (100ms) for stable decay and "breathing" effect
-    // 100ms allows the blinking to feel like a terminal refresh rate
-    const speed = runFast ? 50 : 100; 
-    
-    intervalId = setInterval(() => {
-      setBits(prev => prev.map((row, rIndex) => 
-        row.map((bit, cIndex) => {
-          // Only update valid bits
-          if (map[rIndex][cIndex] !== '#') return ' ';
-          
-          // 50% chance to update any specific bit per tick. 
-          // Higher update rate (0.5) ensures faster convergence to all-0s/all-1s
-          if (Math.random() > 0.5) return bit;
-          
-          // Generate new bit based on current bias
-          return Math.random() < bias ? '1' : '0';
-        })
-      ));
-    }, speed);
-
-    return () => clearInterval(intervalId);
-  }, [runFast, bias, map]);
-
-  return (
-    <div className={`flex flex-col items-center leading-none ${className}`}>
-      {bits.map((row, rowIndex) => (
-        <div key={rowIndex} className="flex">
-          {row.map((bit, colIndex) => {
-            const isVisible = map[rowIndex][colIndex] === '#';
-            
-            // Random flicker effect: 
-            // 5% chance to dim significantly
-            // 2% chance to be brighter (if using text shadow, but here we stick to opacity)
-            // This is re-evaluated every render cycle (approx every 50-100ms)
-            const randomVal = Math.random();
-            const isDim = randomVal < 0.05;
-            const isBright = randomVal > 0.98;
-
-            return (
-              <span 
-                key={colIndex} 
-                className={`
-                  w-[1.2ch] h-[1.2em] flex items-center justify-center 
-                  font-bold font-mono text-base md:text-xl
-                  transition-all duration-75
-                  ${isVisible 
-                    ? (isDim ? 'opacity-40 scale-90' : (isBright ? 'opacity-100 scale-110 brightness-150' : 'opacity-90')) 
-                    : 'opacity-0'
-                  }
-                `}
-                aria-hidden="true"
-              >
-                {isVisible ? bit : '0'}
-              </span>
-            );
-          })}
-        </div>
-      ))}
     </div>
   );
 };
