@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
 import { BinaryLock } from './components/BinaryLock';
+import { BackgroundEffects } from './components/BackgroundEffects';
 
 const App: React.FC = () => {
   const [isLocked, setIsLocked] = useState(true);
 
   return (
-    <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden font-sans selection:bg-yellow-500/30">
+    <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-slate-900 text-slate-100 font-sans selection:bg-yellow-500/30">
+      <BackgroundEffects />
       
-      {/* Content Container */}
+      {/* LOTR Themed Background Layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* 1. Background Image (Bottom Layer) */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] ease-linear scale-110"
+          style={{
+            backgroundImage: "url('/LoR.png')",
+            filter: 'brightness(0.9) contrast(1.1)' 
+          }}
+        />
+
+        {/* 2. Fiery/Golden Gradient Overlay (Middle Layer) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-red-900/30 via-yellow-900/10 to-black/60 mix-blend-overlay z-10" />
+        
+        {/* 3. Darkening Overlay (Top Layer) - Reduced opacity for visibility */}
+        <div className="absolute inset-0 bg-black/50 z-10" />
+        
+        {/* 4. Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] z-20 opacity-80" />
+      </div>
+
       <div className="z-30 flex flex-col items-center justify-center w-full max-w-6xl px-4 h-full">
-        {/* Header */}
+        {/* Header - z-50 ensures text stays ON TOP of the lock if they overlap */}
         <div className="relative z-50 text-center w-full min-h-[14rem] flex items-end justify-center pb-8">
           {isLocked ? (
             <div className="space-y-4 animate-[fadeIn_0.5s_ease-out]">
-              {/* Added drop-shadow to text to ensure visibility on transparent/variable backgrounds */}
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                Squad Prepayment & Pipeline
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 leading-tight drop-shadow-2xl">
+                Squad PREPAYMENT & PIPELINE
               </h1>
             </div>
           ) : (
@@ -29,6 +50,10 @@ const App: React.FC = () => {
 
         {/* Main Content Area */}
         <div className="relative z-0 flex flex-col items-center justify-start w-full">
+          {/* Lock Component Wrapper 
+              - Added padding (p-12) to reserve space for the scale transform so it doesn't bleed into text 
+              - Added mt-4 to provide a little more breathing room
+          */}
           <div className="transition-transform duration-500 scale-125 md:scale-150 p-12 mt-4">
             <BinaryLock isLocked={isLocked} onToggle={() => setIsLocked(!isLocked)} />
           </div>
