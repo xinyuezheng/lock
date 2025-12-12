@@ -76,31 +76,30 @@ export const BinaryLock: React.FC<BinaryLockProps> = ({ isLocked, onToggle }) =>
           map={SHACKLE_MAP} 
           runFast={runFast}
           bias={bias}
-          className={statusColor}
+          className={`${statusColor} drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]`}
         />
       </div>
 
       {/* Lock Body Container */}
       <div className="relative z-10">
-         {/* Dark backing to obscure shackle legs behind the body text */}
-         <div className="absolute inset-1 bg-slate-900 rounded-lg z-[-1]" />
+         {/* Removed the dark backing (bg-slate-900) so the lock is just the 0s and 1s */}
          
         <BitShape 
           map={BODY_MAP} 
           runFast={runFast}
           bias={bias}
-          className={`${statusColor} drop-shadow-[0_0_15px_rgba(0,0,0,0.5)]`}
+          className={`${statusColor} drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)]`}
         />
         
-        {/* Glow effect backing */}
+        {/* Optional: Slight glow effect backing */}
         <div className={`
-          absolute inset-0 rounded-xl bg-current opacity-5 blur-xl transition-opacity duration-500 
+          absolute inset-0 rounded-xl bg-current opacity-10 blur-xl transition-opacity duration-500 
           ${isLocked ? 'text-red-500' : 'text-emerald-400'}
         `} />
       </div>
 
       <div className={`
-        mt-12 text-xs font-mono tracking-[0.3em] font-bold uppercase transition-all duration-300
+        mt-12 text-xs font-mono tracking-[0.3em] font-bold uppercase transition-all duration-300 drop-shadow-md
         ${statusColor}
         ${isAnimating ? 'animate-pulse' : ''}
       `}>
