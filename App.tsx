@@ -9,27 +9,25 @@ const App: React.FC = () => {
     <div className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-slate-900 text-slate-100 font-sans selection:bg-yellow-500/30">
       <BackgroundEffects />
       
-      {/* LOTR Themed Background Layer - Fades in when unlocked */}
-      <div 
-        className={`absolute inset-0 z-0 transition-opacity duration-1000 ease-in-out pointer-events-none ${isLocked ? 'opacity-0' : 'opacity-100'}`}
-      >
-        {/* Dark overlay to ensure text readability */}
-        <div className="absolute inset-0 bg-black/60 z-10" />
-        
-        {/* Fiery Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-red-900/40 via-transparent to-black/80 z-10 mix-blend-overlay" />
-        
-        {/* Ring Script Background Texture */}
+      {/* LOTR Themed Background Layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* 1. Background Image (Bottom Layer) */}
         <div 
-          className="absolute inset-0 opacity-40 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] ease-linear scale-110"
           style={{
-            backgroundImage: `url('https://images4.alphacoders.com/600/600528.jpg')`, // Classic One Ring script on black
-            filter: 'sepia(1) hue-rotate(-50deg) saturate(2) contrast(1.2)' // Make it fiery gold/red
+            backgroundImage: "url('/LoR.png')",
+            filter: 'brightness(0.9) contrast(1.1)' 
           }}
         />
+
+        {/* 2. Fiery/Golden Gradient Overlay (Middle Layer) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-red-900/30 via-yellow-900/10 to-black/60 mix-blend-overlay z-10" />
         
-        {/* Vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] z-20" />
+        {/* 3. Darkening Overlay (Top Layer) - Reduced opacity for visibility */}
+        <div className="absolute inset-0 bg-black/50 z-10" />
+        
+        {/* 4. Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)] z-20 opacity-80" />
       </div>
 
       <div className="z-30 flex flex-col items-center justify-center w-full max-w-6xl px-4 h-full">
@@ -37,7 +35,7 @@ const App: React.FC = () => {
         <div className="relative z-50 text-center w-full min-h-[14rem] flex items-end justify-center pb-8">
           {isLocked ? (
             <div className="space-y-4 animate-[fadeIn_0.5s_ease-out]">
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 leading-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 leading-tight drop-shadow-2xl">
                 Squad PREPAYMENT & PIPELINE
               </h1>
             </div>
